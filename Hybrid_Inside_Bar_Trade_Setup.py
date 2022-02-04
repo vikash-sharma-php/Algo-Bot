@@ -139,8 +139,7 @@ def generate_signal(mb_time,ib_time,sector,shortlist):
                 oc_m = round(abs(mb_open-mb_close),2)
                 oc_i = round(abs(ib_open-ib_close),2)
                 if (oc_m>3*oc_i)and(3*oc_m>2*hl_m)and(mb_high>ib_high)and(mb_low<ib_low)and(hl_m>0.005*mb_open):
-                    if (mb_close>mb_open)and(HL<hl)and(OC<oc)and(ib_open>(mb_high-hl_m/3))and(ib_close>(mb_high-hl_m/3)):
-                        if (mb_close>range_high)and(ib_open>range_high)and(ib_close>range_high)and(sc_mb_close>sc_range_high)and(sc_ib_open>sc_range_high)and(sc_ib_close>sc_range_high):
+                    # buy conditions go in here ( cannot share because of obvious reasons )
                             x=mb_high*100+round(mb_open)
                             x=(x-x%5+5)/100
                             target=round(min(mb_high+hl_m,x),2)
@@ -167,8 +166,7 @@ def generate_signal(mb_time,ib_time,sector,shortlist):
                                 if temp["s"]=="ok":
                                     id=temp["id"]
                                     redisClient2.hset("pending_order_list",token,id)
-                    elif (mb_close<mb_open)and(HL>hl)and(OC>oc)and(ib_open<(mb_low+hl_m/3))and(ib_close<(mb_low+hl_m/3)):
-                        if (mb_close<range_low)and(ib_open<range_low)and(ib_close<range_low)and(sc_mb_close<sc_range_low)and(sc_ib_open<sc_range_low)and(sc_ib_close<sc_range_low):
+                    # sell conditions go in here ( cannot share because of obvious reasons )
                             x=mb_low*100-round(mb_open)
                             x=(x-x%5)/100
                             target=round(max(mb_low-hl_m,x),2)
