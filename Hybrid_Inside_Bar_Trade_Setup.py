@@ -9,13 +9,13 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-def authorize():
+def authorize(): # For Automatic User Authorization
     session=accessToken.SessionModel(client_id=credentials["client_id"],
     secret_key=credentials["secret_key"],redirect_uri=credentials["redirect_uri"],
     response_type="code", grant_type="authorization_code")
     response = session.generate_authcode()
     chrome_options = Options()
-    # chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--headless")
     driver=webdriver.Chrome(chrome_options=chrome_options)
     driver.get(response)
     if WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//div[@class="row mt-3 mx-auto"]'))):
@@ -38,7 +38,7 @@ def authorize():
 
 def check_open_positions(time):
     access_token=(redisClient0.get("token")).decode('ascii')
-    fyers = fyersModel.FyersModel(client_id=credentials["client_id"],token=access_token,log_path="C:\BingeScoop\Log")
+    fyers = fyersModel.FyersModel(client_id=credentials["client_id"],token=access_token,log_path="")
     length=redisClient2.llen("shortlisted_stocks")
     for i in range(length):
         token=(redisClient2.rpop("shortlisted_stocks")).decode('ascii')
@@ -267,7 +267,6 @@ def place_target(token,quantity,value,target):
 
 def position_size(price,sl):
     return(math.floor(capital*0.02/abs(price-sl)))
-    # return 1
 
 def remove_data(time):
     for token in stock_list:
@@ -324,14 +323,14 @@ def validate(time):
     print("Validation Complete\n")
 
 credentials = {
-    "client_id":"0EL5BJ2R0B-100",
-    "secret_key":"2V9GAPXZ3S",
-    "redirect_uri":"https://www.google.com",
-    "user_id":"XP04072",
-    "password":"Ppb@2001",
-    "two_fa":"EHAPB8813B",
-    "pin":"2015"
-    }
+    "client_id":"",
+    "secret_key":"",
+    "redirect_uri":"",
+    "user_id":"",
+    "password":"",
+    "two_fa":"",
+    "pin":""
+    } # The details of the user goes in here
 
 nifty_auto = ["NSE:AMARAJABAT-EQ","NSE:ASHOKLEY-EQ","NSE:BAJAJ-AUTO-EQ","NSE:BALKRISIND-EQ","NSE:BHARATFORG-EQ","NSE:EICHERMOT-EQ","NSE:EXIDEIND-EQ","NSE:HEROMOTOCO-EQ","NSE:M&M-EQ","NSE:TATAMOTORS-EQ","NSE:TVSMOTOR-EQ"]
 nifty_bank = ["NSE:AUBANK-EQ","NSE:AXISBANK-EQ","NSE:BANDHANBNK-EQ","NSE:HDFCBANK-EQ","NSE:ICICIBANK-EQ","NSE:INDUSINDBK-EQ","NSE:KOTAKBANK-EQ","NSE:RBLBANK-EQ","NSE:SBIN-EQ"]
@@ -348,7 +347,7 @@ stock_list=[*nifty_auto, *nifty_bank, *nifty_energy, *nifty_finance, *nifty_fmcg
 index_list = ["NSE:NIFTYAUTO-INDEX","NSE:NIFTYBANK-INDEX","NSE:NIFTYENERGY-INDEX","NSE:NIFTYFINSERVICE-INDEX","NSE:NIFTYFMCG-INDEX","NSE:NIFTYIT-INDEX","NSE:NIFTYMEDIA-INDEX","NSE:NIFTYMETAL-INDEX","NSE:NIFTYPHARMA-INDEX","NSE:NIFTYREALTY-INDEX"]
 
 candle_duration=900
-capital=5000
+capital=50000
 
 redisConnPool0 = redis.ConnectionPool(host='localhost', port=6379, db=0)
 redisConnPool1 = redis.ConnectionPool(host='localhost', port=6379, db=1)
